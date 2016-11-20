@@ -1,19 +1,18 @@
 FROM anapsix/alpine-java:8_server-jre_unlimited
 
-MAINTAINER Kristian Martensen @ CIMA technologies <kma@cima.dk>
-# thanks to Anastas Dancha <anapsix@random.io> for the alpine-java image
-# this image is very heavily inspired by the znly/docker-druid image by jbaptiste <jb@zen.ly>
+MAINTAINER Said Apale <saidimu@gmail.com>
+# Forked from https://github.com/cimatech/druid-container
 
-ENV MYSQL_HOST         mysql
-ENV MYSQL_PORT         3306
-ENV MYSQL_DBNAME       druid
-ENV MYSQL_USERNAME     druid
-ENV MYSQL_PASSWORD     druid
+ENV POSTGRES_HOST         postgres
+ENV POSTGRES_PORT         5432
+ENV POSTGRES_DBNAME       druid
+ENV POSTGRES_USERNAME     druid
+ENV POSTGRES_PASSWORD     druid
 ENV ZOOKEEPER_HOST     zookeeper
-ENV S3_STORAGE_BUCKET  druid-deep-storage
-ENV S3_INDEXING_BUCKET druid-indexing
-ENV S3_ACCESS_KEY      xxxxxxxxxxxx
-ENV S3_ACCESS_KEY      xxxxxxxxxxxx
+# ENV S3_STORAGE_BUCKET  druid-deep-storage
+# ENV S3_INDEXING_BUCKET druid-indexing
+# ENV S3_ACCESS_KEY      xxxxxxxxxxxx
+# ENV S3_ACCESS_KEY      xxxxxxxxxxxx
 ENV DRUID_VERSION      0.9.1.1
 
 # Druid env variable
@@ -23,14 +22,16 @@ ENV DRUID_NEWSIZE      '-'
 ENV DRUID_MAXNEWSIZE   '-'
 ENV DRUID_HOSTNAME     '-'
 ENV DRUID_LOGLEVEL     '-'
+ENV DRUID_SEGMENTCACHE_LOCATION  '-'
 
-RUN apk add --no-cache bash curl \
+RUN apk update \
+    && apk add --no-cache bash curl \
     && mkdir /tmp/druid \
     && curl \
     http://static.druid.io/artifacts/releases/druid-$DRUID_VERSION-bin.tar.gz | tar -xzf - -C /opt \
     && ln -s /opt/druid-$DRUID_VERSION /opt/druid \
     && curl \
-    http://static.druid.io/artifacts/releases/mysql-metadata-storage-$DRUID_VERSION.tar.gz | tar -xzf - -C /opt/druid/extensions
+    http://static.druid.io/artifacts/releases/postgres-metadata-storage-$DRUID_VERSION.tar.gz | tar -xzf - -C /opt/druid/extensions
 
 COPY conf /opt/druid/conf
 COPY start-druid.sh /start-druid.sh
