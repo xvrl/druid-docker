@@ -29,9 +29,7 @@ RUN apk update \
     && mkdir /tmp/druid \
     && curl \
     http://static.druid.io/artifacts/releases/druid-$DRUID_VERSION-bin.tar.gz | tar -xzf - -C /opt \
-    && ln -s /opt/druid-$DRUID_VERSION /opt/druid \
-    && curl \
-    http://static.druid.io/artifacts/releases/postgres-metadata-storage-$DRUID_VERSION.tar.gz | tar -xzf - -C /opt/druid/extensions
+    && ln -s /opt/druid-$DRUID_VERSION /opt/druid
 
 COPY conf /opt/druid/conf
 COPY start-druid.sh /start-druid.sh
