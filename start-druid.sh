@@ -47,12 +47,13 @@ fi
 #     sed -ri 's/druid.host=.*/druid.host='${ipaddress}'/g' /opt/druid/conf/druid/$1/runtime.properties
 # fi
 
-if [ "$DRUID_SEGMENTCACHE_LOCATION" != "-" ]; then
-    sed -ri 's/druid.segmentCache.locations=[{"path":*,"maxSize"\:100000000000}]/druid.segmentCache.locations=[{"path":'${DRUID_SEGMENTCACHE_LOCATION}',"maxSize"\:100000000000}]/g' /opt/druid/conf/druid/$1/runtime.properties
-fi
-
-if [ "$DRUID_DEEPSTORAGE_LOCAL_DIR" != "-" ]; then
-    sed -ri 's/druid.storage.storageDirectory=.*/druid.storage.storageDirectory='${DRUID_DEEPSTORAGE_LOCAL_DIR}'/g' /opt/druid/conf/druid/_common/runtime.properties
-fi
+# if [ "$DRUID_SEGMENTCACHE_LOCATION" != "-" ]; then
+#     # sed -ri 's/druid.segmentCache.locations=[{"path":*,"maxSize"\:100000000000}]/druid.segmentCache.locations=[{"path":'${DRUID_SEGMENTCACHE_LOCATION}',"maxSize"\:100000000000}]/g' /opt/druid/conf/druid/$1/runtime.properties
+#     sed -ri 's/var\/druid\/segment-cache/'${DRUID_SEGMENTCACHE_LOCATION}'/g' /opt/druid/conf/druid/$1/runtime.properties
+# fi
+#
+# if [ "$DRUID_DEEPSTORAGE_LOCAL_DIR" != "-" ]; then
+#     sed -ri 's/druid.storage.storageDirectory=.*/druid.storage.storageDirectory='${DRUID_DEEPSTORAGE_LOCAL_DIR}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
+# fi
 
 java `cat /opt/druid/conf/druid/$1/jvm.config | xargs` -cp /opt/druid/conf/druid/_common:/opt/druid/conf/druid/$1:/opt/druid/lib/* io.druid.cli.Main server $@
