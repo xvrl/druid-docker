@@ -13,7 +13,7 @@ MAINTAINER Said Apale <saidimu@gmail.com>
 # ENV S3_INDEXING_BUCKET druid-indexing
 # ENV S3_ACCESS_KEY      xxxxxxxxxxxx
 # ENV S3_ACCESS_KEY      xxxxxxxxxxxx
-ENV DRUID_VERSION      0.9.1.1
+ENV DRUID_VERSION      0.9.2
 
 # Druid env variable
 ENV DRUID_XMX          '-'
