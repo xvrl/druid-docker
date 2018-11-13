@@ -1,7 +1,8 @@
+# VERSION 0.12.3-7
 FROM anapsix/alpine-java:8_server-jre_unlimited
 
-MAINTAINER Said Apale <saidimu@gmail.com>
-# Forked from https://github.com/cimatech/druid-container
+MAINTAINER Maciej Brynski <maciek@brynski.pl>
+# Forked from https://github.com/saidimu/druid-docker
 
 # ENV POSTGRES_HOST         postgres
 # ENV POSTGRES_PORT         5432
@@ -13,7 +14,7 @@ MAINTAINER Said Apale <saidimu@gmail.com>
 # ENV S3_INDEXING_BUCKET druid-indexing
 # ENV S3_ACCESS_KEY      xxxxxxxxxxxx
 # ENV S3_ACCESS_KEY      xxxxxxxxxxxx
-ENV DRUID_VERSION      0.9.2
+ENV DRUID_VERSION      0.12.3
 
 # Druid env variable
 ENV DRUID_XMX          '-'
@@ -32,6 +33,7 @@ RUN apk update \
     && curl \
     http://static.druid.io/artifacts/releases/druid-$DRUID_VERSION-bin.tar.gz | tar -xzf - -C /opt \
     && ln -s /opt/druid-$DRUID_VERSION /opt/druid
+RUN curl http://static.druid.io/artifacts/releases/mysql-metadata-storage-$DRUID_VERSION.tar.gz | tar -xzf - -C /opt/druid/extensions
 
 COPY conf /opt/druid/conf
 COPY start-druid.sh /start-druid.sh

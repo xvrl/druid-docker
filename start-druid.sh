@@ -7,32 +7,17 @@ if [ "${1:0:1}" = '' ]; then
     exit 1
 fi
 
-POSTGRES_CONNECT_URI="jdbc:postgresql\:\/\/${POSTGRES_HOST}\:${POSTGRES_PORT}\/${POSTGRES_DBNAME}"
+DB_CONNECT_URI="jdbc:${DB_TYPE}\:\/\/${DB_HOST}\:${DB_PORT}\/${DB_DBNAME}"
 
 sed -ri 's/druid.zk.service.host.*/druid.zk.service.host='${ZOOKEEPER_HOST}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
-sed -ri 's/druid.metadata.storage.connector.connectURI.*/druid.metadata.storage.connector.connectURI='${POSTGRES_CONNECT_URI}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
-sed -ri 's/druid.metadata.storage.connector.user.*/druid.metadata.storage.connector.user='${POSTGRES_USERNAME}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
-sed -ri 's/druid.metadata.storage.connector.password.*/druid.metadata.storage.connector.password='${POSTGRES_PASSWORD}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
+sed -ri 's/druid.metadata.storage.type.*/druid.metadata.storage.type='${DB_TYPE}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
+sed -ri 's/druid.metadata.storage.connector.connectURI.*/druid.metadata.storage.connector.connectURI='${DB_CONNECT_URI}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
+sed -ri 's/druid.metadata.storage.connector.user.*/druid.metadata.storage.connector.user='${DB_USERNAME}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
+sed -ri 's/druid.metadata.storage.connector.password.*/druid.metadata.storage.connector.password='${DB_PASSWORD}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
 # sed -ri 's/druid.s3.accessKey.*/druid.s3.accessKey='${S3_ACCESS_KEY}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
 # sed -ri 's/druid.s3.secretKey.*/druid.s3.secretKey='${S3_SECRET_KEY}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
 # sed -ri 's/druid.storage.bucket.*/druid.storage.bucket='${S3_STORAGE_BUCKET}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
 # sed -ri 's/druid.indexer.logs.s3Bucket.*/druid.indexer.logs.s3Bucket='${S3_INDEXING_BUCKET}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
-
-if [ "$DRUID_XMX" != "-" ]; then
-    sed -ri 's/Xmx.*/Xmx'${DRUID_XMX}'/g' /opt/druid/conf/druid/$1/jvm.config
-fi
-
-if [ "$DRUID_XMS" != "-" ]; then
-    sed -ri 's/Xms.*/Xms'${DRUID_XMS}'/g' /opt/druid/conf/druid/$1/jvm.config
-fi
-
-if [ "$DRUID_MAXNEWSIZE" != "-" ]; then
-    sed -ri 's/MaxNewSize=.*/MaxNewSize='${DRUID_MAXNEWSIZE}'/g' /opt/druid/conf/druid/$1/jvm.config
-fi
-
-if [ "$DRUID_NEWSIZE" != "-" ]; then
-    sed -ri 's/NewSize=.*/NewSize='${DRUID_NEWSIZE}'/g' /opt/druid/conf/druid/$1/jvm.config
-fi
 
 if [ "$DRUID_HOSTNAME" != "-" ]; then
     sed -ri 's/druid.host=.*/druid.host='${DRUID_HOSTNAME}'/g' /opt/druid/conf/druid/$1/runtime.properties
@@ -56,4 +41,4 @@ fi
 #     sed -ri 's/druid.storage.storageDirectory=.*/druid.storage.storageDirectory='${DRUID_DEEPSTORAGE_LOCAL_DIR}'/g' /opt/druid/conf/druid/_common/common.runtime.properties
 # fi
 
-java `cat /opt/druid/conf/druid/$1/jvm.config | xargs` -cp /opt/druid/conf/druid/_common:/opt/druid/conf/druid/$1:/opt/druid/lib/* io.druid.cli.Main server $@
+java ${JAVA_OPTS} -cp /opt/druid/conf/druid/_common:/opt/druid/conf/druid/$1:/opt/druid/lib/* io.druid.cli.Main server $@
