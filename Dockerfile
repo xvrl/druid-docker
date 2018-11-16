@@ -1,4 +1,4 @@
-# VERSION 0.12.3-7
+# VERSION 0.12.3-17
 FROM anapsix/alpine-java:8_server-jre_unlimited
 
 MAINTAINER Maciej Brynski <maciek@brynski.pl>
