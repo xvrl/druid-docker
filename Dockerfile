@@ -4,11 +4,11 @@ FROM anapsix/alpine-java:8_server-jre_unlimited
 MAINTAINER Maciej Brynski <maciek@brynski.pl>
 # Forked from https://github.com/saidimu/druid-docker
 
-# ENV POSTGRES_HOST         postgres
-# ENV POSTGRES_PORT         5432
-# ENV POSTGRES_DBNAME       druid
-# ENV POSTGRES_USERNAME     druid
-# ENV POSTGRES_PASSWORD     druid
+# ENV DB_HOST            mysql
+# ENV DB_PORT            3306
+# ENV DB_DBNAME          druid
+# ENV DB_USERNAME        druid
+# ENV DB_PASSWORD        druid
 # ENV ZOOKEEPER_HOST     zookeeper
 # ENV S3_STORAGE_BUCKET  druid-deep-storage
 # ENV S3_INDEXING_BUCKET druid-indexing
