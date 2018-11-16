@@ -3,7 +3,7 @@ Docker Druid
 
 Tags:
 
-- 0.9.1.1, 0.9, latest ([Dockerfile](https://github.com/cimatech/druid-container/blob/master/Dockerfile))
+- 0.12.3, latest ([Dockerfile](https://github.com/maver1ck/druid-docker/blob/master/Dockerfile))
 
 What is Druid?
 ==================
@@ -25,9 +25,10 @@ Available environment options:
 
 Authors
 =======
-- Said Apale <saidimu@gmail.com>
+- Maciej Bryński <maciek@brynski.pl>
 
 Special thanks goes to:  
+- Said Apale <saidimu@gmail.com>
 - Kristian Martensen <kma@cima.dk>  
 - Jean-Baptiste DALIDO <jb@zen.ly>
 - Clément REY <clement@zen.ly>
