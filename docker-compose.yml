@@ -1,16 +1,12 @@
 version: "2"
 services:
-  mysql:
-    container_name: mysql
-    image: mariadb:latest
+  metadata-store:
+    container_name: postgres
+    image: postgres:11.2
     environment:
-      - MYSQL_ROOT_PASSWORD=keepasecret
-      - MYSQL_USER=druid
-      - MYSQL_PASSWORD=keepasecret
-      - MYSQL_DATABASE=druid
-    command:
-      - '--character-set-server=utf8'
-      - '--collation-server=utf8_unicode_ci'
+      - POSTGRES_USER=druid
+      - POSTGRES_PASSWORD=mysecretpassword
+
 
   zookeeper:
     container_name: zookeeper
@@ -20,16 +16,21 @@ services:
       - ZOO_SERVERS=zookeeper
 
   coordinator:
-    image: cima/druid
+    image: confluentinc/cc-druid:v0.0.1-0.14.0
     ports:
-      - "3001:8081"
+      - "8081:8081"
     environment:
+      - ZOOKEEPER_HOST=zookeeper
       - DRUID_XMX=1g
       - DRUID_XMS=1g
       - DRUID_MAXNEWSIZE=250m
       - DRUID_NEWSIZE=250m
-      - MYSQL_USERNAME=druid
-      - MYSQL_PASSWORD=keepasecret
+      - DB_TYPE=postgresql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DBNAME=druid
+      - DB_USERNAME=druid
+      - DB_PASSWORD=mysecretpassword
       - S3_STORAGE_BUCKET=your-deep-storage-bucket-goes-here
       - S3_INDEXING_BUCKET=your-index-log-bucket-goes-here
       - S3_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXX
@@ -38,16 +39,21 @@ services:
       - coordinator
 
   broker:
-    image: cima/druid
+    image: confluentinc/cc-druid:v0.0.1-0.14.0
     ports:
-      - "3002:8082"
+      - "8082:8082"
     environment:
+      - ZOOKEEPER_HOST=zookeeper
       - DRUID_XMX=1g
       - DRUID_XMS=1g
       - DRUID_MAXNEWSIZE=250m
       - DRUID_NEWSIZE=250m
-      - MYSQL_USERNAME=druid
-      - MYSQL_PASSWORD=keepasecret
+      - DB_TYPE=postgresql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DBNAME=druid
+      - DB_USERNAME=druid
+      - DB_PASSWORD=mysecretpassword
       - S3_STORAGE_BUCKET=your-deep-storage-bucket-goes-here
       - S3_INDEXING_BUCKET=your-index-log-bucket-goes-here
       - S3_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXX
@@ -56,16 +62,21 @@ services:
       - broker
 
   historical:
-    image: cima/druid
+    image: confluentinc/cc-druid:v0.0.1-0.14.0
     ports:
-      - "3003:8083"
+      - "8083:8083"
     environment:
+      - ZOOKEEPER_HOST=zookeeper
       - DRUID_XMX=1g
       - DRUID_XMS=1g
       - DRUID_MAXNEWSIZE=250m
       - DRUID_NEWSIZE=250m
-      - MYSQL_USERNAME=druid
-      - MYSQL_PASSWORD=keepasecret
+      - DB_TYPE=postgresql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DBNAME=druid
+      - DB_USERNAME=druid
+      - DB_PASSWORD=mysecretpassword
       - S3_STORAGE_BUCKET=your-deep-storage-bucket-goes-here
       - S3_INDEXING_BUCKET=your-index-log-bucket-goes-here
       - S3_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXX
@@ -74,16 +85,21 @@ services:
       - historical
 
   overlord:
-    image: cima/druid
+    image: confluentinc/cc-druid:v0.0.1-0.14.0
     ports:
-      - "4000:8090"
+      - "8090:8090"
     environment:
+      - ZOOKEEPER_HOST=zookeeper
       - DRUID_XMX=1g
       - DRUID_XMS=1g
       - DRUID_MAXNEWSIZE=250m
       - DRUID_NEWSIZE=250m
-      - MYSQL_USERNAME=druid
-      - MYSQL_PASSWORD=keepasecret
+      - DB_TYPE=postgresql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DBNAME=druid
+      - DB_USERNAME=druid
+      - DB_PASSWORD=mysecretpassword
       - S3_STORAGE_BUCKET=your-deep-storage-bucket-goes-here
       - S3_INDEXING_BUCKET=your-index-log-bucket-goes-here
       - S3_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXX
@@ -92,19 +108,47 @@ services:
       - overlord
 
   middlemanager:
-    image: cima/druid
+    image: confluentinc/cc-druid:v0.0.1-0.14.0
     ports:
-      - "4001:8091"
+      - "8091:8091"
     environment:
+      - ZOOKEEPER_HOST=zookeeper
       - DRUID_XMX=1g
       - DRUID_XMS=1g
       - DRUID_MAXNEWSIZE=250m
       - DRUID_NEWSIZE=250m
-      - MYSQL_USERNAME=druid
-      - MYSQL_PASSWORD=keepasecret
+      - DB_TYPE=postgresql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DBNAME=druid
+      - DB_USERNAME=druid
+      - DB_PASSWORD=mysecretpassword
       - S3_STORAGE_BUCKET=your-deep-storage-bucket-goes-here
       - S3_INDEXING_BUCKET=your-index-log-bucket-goes-here
       - S3_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXX
       - S3_SECRET_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     command:
       - middleManager
+
+  router:
+    image: confluentinc/cc-druid:v0.0.1-0.14.0
+    ports:
+      - "8888:8888"
+    environment:
+      - ZOOKEEPER_HOST=zookeeper
+      - DRUID_XMX=1g
+      - DRUID_XMS=1g
+      - DRUID_MAXNEWSIZE=250m
+      - DRUID_NEWSIZE=250m
+      - DB_TYPE=postgresql
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_DBNAME=druid
+      - DB_USERNAME=druid
+      - DB_PASSWORD=mysecretpassword
+      - S3_STORAGE_BUCKET=your-deep-storage-bucket-goes-here
+      - S3_INDEXING_BUCKET=your-index-log-bucket-goes-here
+      - S3_ACCESS_KEY=XXXXXXXXXXXXXXXXXXXX
+      - S3_SECRET_KEY=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    command:
+      - router
