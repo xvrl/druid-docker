@@ -16,10 +16,6 @@ Configuration
 
 Available environment options:
 
-- `DRUID_XMX` '-'
-- `DRUID_XMS` '-'
-- `DRUID_NEWSIZE` '-'
-- `DRUID_MAXNEWSIZE` '-'
 - `DRUID_HOSTNAME` '-'
 - `DRUID_SEGMENTCACHE_LOCATION` '-'
 
